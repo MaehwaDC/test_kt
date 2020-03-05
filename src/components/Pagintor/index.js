@@ -2,6 +2,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import classNames from 'classnames';
 
 import { generateArr, random } from '../../utils/helpers';
 
@@ -9,10 +10,17 @@ import './index.scss';
 
 class Paginator extends PureComponent {
   renderItem = (_, index) => {
+    const { current } = this.props
 
+
+    const page = index + 1;
     return (
-      <Link className="pagination__page" to={index === 0 ? '/' : `/${index + 1}`}  key={random()}>
-        {index + 1}
+      <Link 
+        className={classNames('pagination__page', { 'pagination__seleted': current === page })} 
+        to={index === 0 ? '/' : `/?page=${page}`}  
+        key={random()}
+      >
+        {page}
       </Link>
     );  
   }

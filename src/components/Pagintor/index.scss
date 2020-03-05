@@ -11,10 +11,10 @@
     text-align: center;
     color: inherit;
     text-decoration: none;
+  }
 
-    &__seleted, &:hover {
-      background-color: white;
-      border-radius: 50%;
-    }
+  &__seleted, &__page:hover {
+    background-color: white;
+    border-radius: 50%;
   }
 }
