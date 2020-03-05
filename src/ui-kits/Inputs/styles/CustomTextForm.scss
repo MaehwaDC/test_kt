@@ -22,6 +22,10 @@
     &::-webkit-scrollbar {
       display: none;
     }
+
+    &:focus {
+      box-shadow: #{$focus-box-shadow};
+    }
   }  
 }
 

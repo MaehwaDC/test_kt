@@ -4,6 +4,17 @@
   min-height: 800px;
   
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  &__item {
+    background-color: $primary-background-color;
+    padding: 10px 25px;
+    border-radius: 15px;
+
+    &:not(:last-child) {
+      margin-bottom: 10px;
+    }
+  }
 }

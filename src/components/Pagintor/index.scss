@@ -1,0 +1,20 @@
+
+.pagination {
+  width: 100%;
+  
+  display: flex;
+
+  &__page {
+    height: 30px;
+    min-width: 30px;
+    line-height: 30px;
+    text-align: center;
+    color: inherit;
+    text-decoration: none;
+
+    &__seleted, &:hover {
+      background-color: white;
+      border-radius: 50%;
+    }
+  }
+}
