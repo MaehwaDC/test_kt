@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 
-import { generateArr, random } from '../../utils/helpers';
+import { generateArr } from '../../utils/helpers';
 
 import './index.scss';
 
@@ -16,9 +16,9 @@ class Paginator extends PureComponent {
     const page = index + 1;
     return (
       <Link 
-        className={classNames('pagination__page', { 'pagination__seleted': current === page })} 
+        className={classNames('pagination__page', { 'pagination__seleted': +current === page })} 
         to={index === 0 ? '/' : `/?page=${page}`}  
-        key={random()}
+        key={index}
       >
         {page}
       </Link>
