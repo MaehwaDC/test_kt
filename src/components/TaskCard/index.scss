@@ -1,0 +1,44 @@
+@import "../../styles/variables";
+
+.task-card {
+  width: 100%;
+  height: 35px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: $secondary-background-color;
+  border-radius: 5px;
+  padding: 5px 15px;
+
+  box-shadow: #{$default-box-shadow};
+
+  &:not(:last-child) {
+    margin-bottom: 10px;
+  }
+
+  &:hover {
+    .task-card__buttons {
+      display: flex;
+    }
+  }
+
+  &__discription {
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    padding: 5px; 
+  }
+
+  &__buttons {
+    display: none;
+
+    width: 40px;
+
+    @media (max-width: 768px) {
+      display: flex;
+    }
+
+    justify-content: space-between;
+  }
+}

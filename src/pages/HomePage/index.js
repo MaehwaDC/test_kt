@@ -1,18 +1,17 @@
 
 import React, { PureComponent } from 'react'
-import PropTypes from 'prop-types'
+import TaskList from '../../components/TaskList';
 
-export default class HomePage extends PureComponent {
-  static propTypes = {
-    prop: PropTypes
-  }
+import './index.scss';
 
+class HomePage extends PureComponent {
   render() {
     return (
-      <div>
-        
+      <div className="content-wrapper content">
+        <TaskList />
       </div>
     );
   }
 }
 
+export default HomePage;
