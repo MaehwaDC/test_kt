@@ -1,20 +1,25 @@
 import Entity from './BaseEntity';
 
 export class TasksApi extends Entity {
-  async getTasks(pageNumber) {
-    const res = await this.firebase.database().ref('/tasks').once('value');
-    console.log('res.val(', res.val())
+  async getTasks(pageNumber, limit) {
+    let ref = this.firebase.database().ref('/tasks');
+    ref = ref.orderByChild('count');
+    ref = ref.startAt(((pageNumber * limit) - limit).toString());
+    ref = ref.endAt((pageNumber * limit).toString());
+    const res = await ref.once('value');
     return res.val();
   }
   
-  async updateTask(task, count, id) {
+  async updateTask(task, id) {
     const updates = {};
-    let currentId = id;
-    if (!currentId) {
-      currentId = this.firebase.database().ref().child('tasks').push().key;
+
+    const ref = this.firebase.database().ref('/tasks');
+    if (!id) {
+      ref.push({ ...task });
+      return;
     } 
-    updates['/tasks/' + count] = { id: currentId, ...task };
-    const res = await this.firebase.database().ref().update(updates, this.errorHandler);
+    updates['/' + id] = task;
+    const res = await ref.update(updates, this.errorHandler);
     return res;
   }
 
@@ -23,10 +28,15 @@ export class TasksApi extends Entity {
     return res;
   }
 
+  removeHandlers = () => {
+    this.firebase.database().ref('/tasks').off();
+  }
+
   async updateTasksHendler(page, limit, func) {
     let ref = this.firebase.database().ref('/tasks');
-    // ref = ref.startAt((page * limit) - limit);
-    ref = ref.limitToLast(page * limit);
+    ref = ref.orderByChild('count');
+    ref = ref.startAt(((page * limit) - limit).toString());
+    ref = ref.endAt((page * limit).toString());
     ref.on('value', func);
   }
 

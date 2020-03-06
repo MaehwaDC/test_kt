@@ -9,24 +9,28 @@ import qs from 'query-string';
 import Paginator from '../../components/Pagintor';
 import { CustomTextForm } from '../../ui-kits/Inputs';
 import TaskCard from '../../components/TaskCard';
-import { deleteTask, updateTask, onUpdateTasksHendler } from '../../store/tasks/actions';
+import { deleteTask, updateTask, onUpdateTasksHandler, removeHandlers } from '../../store/tasks/actions';
 
 import './index.scss';
 
 class HomePage extends PureComponent {
   componentDidMount() {
-    const { onUpdateTasksHendler } = this.props;
-    onUpdateTasksHendler()
+    const { onUpdateTasksHandler } = this.props;
+    this.dataUpdateHendler = onUpdateTasksHandler();
   }
 
   componentDidUpdate(prevProps) {
-    const { history } = this.props
-    if(history.location.search !== prevProps.history.location.search) {
-      const { onUpdateTasksHendler } = this.props;
-      const { page = 1 } = qs.parse(history.location.search);
-
-      onUpdateTasksHendler(page, 9);
+    const { location } = this.props;
+    if(location.search !== prevProps.location.search) {
+      const { onUpdateTasksHandler } = this.props;
+      const { page = 1 } = qs.parse(location.search);
+      removeHandlers();
+      onUpdateTasksHandler(page);
     }
+  }
+
+  componentDidUnMount() {
+    removeHandlers()
   }
   
   
@@ -36,16 +40,19 @@ class HomePage extends PureComponent {
     updateTask({ content: value }, id);
   }
   
-  renderElement = (task) => {
+  renderElement = (id) => {
     const { 
       deleteTask,
+      taskList,
     } = this.props;
 
+    const task = taskList[id];
     return (
-      <Fragment key={task.id}>
+      <Fragment key={id}>
         <TaskCard 
           deleteTask={deleteTask}
           editTask={this.onUpdateTask}
+          id={id}
           {...task}
         />
       </Fragment>
@@ -66,7 +73,7 @@ class HomePage extends PureComponent {
             <div className="task-list__input-wrapper">
               <CustomTextForm onSubmit={this.onUpdateTask} />
             </div>
-            {taskList.reverse().map(this.renderElement)}
+            {Object.keys(taskList).reverse().map(this.renderElement)}
         </div>
         </div>
         <div className="content__item">
@@ -88,7 +95,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = {
   deleteTask,
   updateTask,
-  onUpdateTasksHendler,
+  onUpdateTasksHandler,
 }
 
 const enhance = compose(
