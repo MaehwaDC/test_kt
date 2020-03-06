@@ -20,7 +20,7 @@ export const updateTasks = (tasks) => async (dispatch) => {
 }
 
 export const onUpdateTasksHandler = (page = 1, limit = 9) => (dispatch) => {
-  api.tasks.updateTasksHendler(
+  api.tasks.updateTasksHandler(
     page,
     limit, 
     (snapshot) => updateTasks(snapshot.val())(dispatch)
