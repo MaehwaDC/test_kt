@@ -6,6 +6,5 @@ export const AddButton = ({ children, ...props }) => {
     <button {...props} className="add-button">
       {children}
     </button>
-  )
-}
-
+  );
+};

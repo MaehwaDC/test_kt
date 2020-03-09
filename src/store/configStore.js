@@ -4,9 +4,7 @@ import rootReducer from './rootReducer';
 
 export default function configStore(initialState = {}) {
   const createStoreWithMiddleware = compose(
-    applyMiddleware(
-      thunk,
-    )(createStore),
+    applyMiddleware(thunk)(createStore),
   );
 
   const store = createStoreWithMiddleware(rootReducer, initialState);

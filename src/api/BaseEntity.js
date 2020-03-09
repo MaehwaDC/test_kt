@@ -1,6 +1,5 @@
-
 class Entity {
-  constructor(firebase) {    
+  constructor(firebase) {
     this.firebase = firebase;
   }
 }

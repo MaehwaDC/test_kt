@@ -1,7 +1,6 @@
-
 .pagination {
   width: 100%;
-  
+
   display: flex;
 
   &__page {
@@ -13,7 +12,8 @@
     text-decoration: none;
   }
 
-  &__seleted, &__page:hover {
+  &__seleted,
+  &__page:hover {
     background-color: white;
     border-radius: 50%;
   }

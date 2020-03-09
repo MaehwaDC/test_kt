@@ -1,10 +1,8 @@
-import {
-  GET_TASKS
-} from './types';
+import { GET_TASKS } from './types';
 
 const initialState = {
   list: [],
-}
+};
 
 export default (state = initialState, action) => {
   switch (action.type) {
@@ -15,4 +13,4 @@ export default (state = initialState, action) => {
       return state;
     }
   }
-}
+};
