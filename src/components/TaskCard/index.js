@@ -9,15 +9,10 @@ import './index.scss';
 class TaskCard extends PureComponent {
 
   onEditClick = () => {
-    
-  }
-
-  onEditSubmit = () => { 
     const { editTask, id } = this.props;
-
-    editTask({ content: '' }, id);
+    
+    editTask(id);
   }
-
   onDeleteClick = () => {
     const { deleteTask, id } = this.props
 

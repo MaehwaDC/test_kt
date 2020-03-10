@@ -8,41 +8,75 @@ export class TasksApi extends Entity {
     let doc;
     // create new task
     if (!id) {
-      const colData = await col.get();
-      const size = colData.size;
+      const docMeta = this.firebase.firestore().collection("meta").doc('tasksData');
+
+      const { totalCount } = (await docMeta.get()).data();
+      docMeta.update({ totalCount: totalCount + 1 });
+
       doc = col.doc();
-      return await doc.set({ index: size, id: doc.id, date: Date.now(), ...task });
+
+      return await doc.set({ index: totalCount, id: doc.id, date: Date.now(), ...task });
     }
     doc = col.doc(id);
-    const res = await doc.update(task, this.errorHandler);
+    const res = await doc.update(task);
     return res;
   }
 
   async deleteTask(id) {
-    const res = await this.firebase
+    const docMeta = this.firebase.firestore().collection("meta").doc('tasksData');
+
+    const { totalCount } = (await docMeta.get()).data();
+    docMeta.update({ totalCount: totalCount - 1 });
+
+
+    return await this.firebase
       .firestore()
       .collection('tasks')
       .doc(id)
       .delete();
-    return res;
   }
 
   async updateTasksHandler(page, limit, dispatch) {
-    let col = this.firebase.firestore().collection("tasks");
+    let colTasks = this.firebase.firestore().collection("tasks");
 
-    const firstLimit = Math.max((page * limit) - limit, limit);
+    const docMeta = this.firebase.firestore().collection("meta").doc('tasksData');
 
-    col = col.orderBy('index');
-    col = col.startAt(firstLimit);
-    col = col.limit(limit);
+    const { totalCount } = (await docMeta.get()).data();
 
-    return col.onSnapshot((res) => {
+    let startLimit = totalCount - ((page - 1) * limit);
+    colTasks = colTasks.orderBy('index', 'desc');
+    if (page === 1) {
+      colTasks = colTasks.startAt(totalCount);
+    } else {
+      colTasks = colTasks.startAfter(startLimit);
+    }
+
+
+    colTasks = colTasks.limit(limit)
+
+    const colMetaUnsub = docMeta.onSnapshot((res) => {
+      dispatch(res.data());
+    });
+
+    const colTasksUnsub = colTasks.onSnapshot((res) => {
       const data = res.docs.map(doc => doc.data());
       dispatch({
         data,
-        size: res.size,
       });
-    })
+    });
+
+    return () => {
+      colTasksUnsub();
+      colMetaUnsub();
+    }
+  }
+
+  async fetchTask(id) {
+    let colTasks = this.firebase.firestore().collection("tasks");
+
+    const snapshot = await colTasks.doc(id).get();
+
+    return snapshot.data();
   }
 
   errorHandler(err) {

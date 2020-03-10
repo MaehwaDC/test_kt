@@ -1,15 +1,21 @@
-import { GET_TASKS } from './types';
+import { UPDATE_TASKS, UPDATE_SIZE, SET_SELECTED_TASK } from './types';
 
 const initialState = {
   list: [],
-  size: 0,
+  totalCount: 0,
+  selectedTask: {},
 }
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case GET_TASKS: {
-      const { data, size } = action.payload;
-      return { ...state, list: data || [], size };
+    case UPDATE_TASKS: {
+      return { ...state, list: action.payload };
+    }
+    case UPDATE_SIZE: {
+      return { ...state, totalCount: action.payload };
+    }
+    case SET_SELECTED_TASK: {
+      return { ...state, selectedTask: action.payload };
     }
     default: {
       return state;

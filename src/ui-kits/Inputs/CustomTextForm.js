@@ -7,9 +7,22 @@ import { AddButton } from '../Buttons';
 import './styles/CustomTextForm.scss';
 
 export class CustomTextForm extends PureComponent {
-  state = {
-    inputValue: '',
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      inputValue: props.inputValue,
+    };
+  }
+
+  componentDidUpdate(prevProps) {
+    const { inputValue } = this.props;
+
+    if(!prevProps.inputValue && inputValue !== prevProps.inputValue) {
+      this.setState({ inputValue });
+    }
+  }
+  
 
   onChange = e => this.setState({ inputValue: e.target.value });
 
@@ -23,7 +36,7 @@ export class CustomTextForm extends PureComponent {
   };
 
   render() {
-    const { className, rows, ...props } = this.props;
+    const { className, buttonContent } = this.props;
     const { inputValue } = this.state;
 
     return (
@@ -33,9 +46,8 @@ export class CustomTextForm extends PureComponent {
           onChange={this.onChange}
           placeholder="enter a title for this card"
           className={classNames('custom-form__input-text', className)}
-          {...props}
         />
-        <AddButton type="submit">Create task</AddButton>
+        <AddButton type="submit">{buttonContent}</AddButton>
       </form>
     );
   }
@@ -45,10 +57,14 @@ CustomTextForm.propTypes = {
   className: PropTypes.string,
   rows: PropTypes.number,
   onSubmit: PropTypes.func,
+  buttonContent: PropTypes.string,
+  inputValue: PropTypes.string,
 };
 
 CustomTextForm.defaultProps = {
   className: '',
   rows: 4,
   onSubmit: () => {},
+  buttonContent: 'Create task',
+  inputValue: '',
 };

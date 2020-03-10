@@ -1,0 +1,26 @@
+@import '../../styles/variables';
+
+.edit-page {
+  padding: 200px 0;
+
+
+  &__item {
+    background-color: $primary-background-color;
+    padding: 20px 10px;
+    border-radius: 10px;
+  }
+
+
+  &__back-button {
+    margin-top: 10px;
+    display: inline-block;
+    padding: 10px;
+
+    border-radius: 10px;
+    background-color: #d85e5e;
+
+    text-decoration: none;
+    color: inherit;
+  }
+
+}
