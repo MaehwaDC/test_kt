@@ -9,26 +9,31 @@ import qs from 'query-string';
 import Paginator from '../../components/Pagintor';
 import { CustomTextForm } from '../../ui-kits/Inputs';
 import TaskCard from '../../components/TaskCard';
-import { deleteTask, updateTask, onUpdateTasksHandler, fetchTasks } from '../../store/tasks/actions';
+import { deleteTask, updateTask, onUpdateTasksHandler } from '../../store/tasks/actions';
 
 import './index.scss';
 
 class HomePage extends PureComponent {
   componentDidMount() {
-    const { fetchTasks } = this.props;
-    fetchTasks()
+    const { onUpdateTasksHandler, location } = this.props;
+    const { page = 1 } = qs.parse(location.search);
+    this.unsubscribe = onUpdateTasksHandler(page);
   }
 
   componentDidUpdate(prevProps) {
     const { location } = this.props;
+
+    // resubscribe to new tasks page
     if(location.search !== prevProps.location.search) {
-      const { fetchTasks } = this.props;
+      const { onUpdateTasksHandler } = this.props;
       const { page = 1 } = qs.parse(location.search);
-      fetchTasks(page)
+      this.unsubscribe();
+      onUpdateTasksHandler(page)
     }
   }
 
-  componentDidUnMount() {
+  componentWillUnmount() {
+    this.unsubscribe()
   }
   
   
@@ -56,8 +61,8 @@ class HomePage extends PureComponent {
     const { 
       taskList,
       location,
+      tasksCount,
     } = this.props;
-
     const { page = 1 } = qs.parse(location.search);
 
     return (
@@ -71,7 +76,7 @@ class HomePage extends PureComponent {
         </div>
         </div>
         <div className="content__item">
-          <Paginator current={page} count={12} />
+          <Paginator current={page} count={tasksCount} />
         </div>
       </div>
     );
@@ -79,17 +84,19 @@ class HomePage extends PureComponent {
 }
 
 HomePage.propTypes = {
-  taskList: PropTypes.object,
+  taskList: PropTypes.array,
+  tasksCount: PropTypes.number,
 }
 
 const mapStateToProps = state => ({
   taskList: state.tasks.list,
+  tasksCount: state.tasks.size,
 })
 
 const mapDispatchToProps = {
   deleteTask,
   updateTask,
-  fetchTasks,
+  onUpdateTasksHandler,
 }
 
 const enhance = compose(

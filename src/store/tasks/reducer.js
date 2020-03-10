@@ -4,12 +4,14 @@ import {
 
 const initialState = {
   list: [],
+  size: 0,
 }
 
 export default (state = initialState, action) => {
   switch (action.type) {
     case GET_TASKS: {
-      return { ...state, list: action.payload || [] };
+      const { data, size } = action.payload;
+      return { ...state, list: data || [], size };
     }
     default: {
       return state;

@@ -10,25 +10,17 @@ export const deleteTask = (taskId) => async (dispatch) => {
   await api.tasks.deleteTask(taskId);
   dispatch({ type: DELETE_TASK, payload: taskId });
 }
-export const fetchTasks = (page = 1, limit = 9) => async (dispatch) => {
-  let data = await api.tasks.getTasks(page, limit);
+
+export const updateTasks = (data) => async (dispatch) => {
   dispatch({ type: GET_TASKS, payload: data });
 }
 
-export const updateTasks = (tasks) => async (dispatch) => {
-  dispatch({ type: GET_TASKS, payload: tasks });
-}
-
 export const onUpdateTasksHandler = (page = 1, limit = 9) => (dispatch) => {
-  api.tasks.updateTasksHandler(
+  return api.tasks.updateTasksHandler(
     page,
     limit, 
-    (snapshot) => updateTasks(snapshot.val())(dispatch)
+    (data) => updateTasks(data)(dispatch)
   );
-}
-
-export const removeHandlers = () => {
-  api.tasks.removeHandlers();
 }
 
 export const updateTask = (task, id) => async (dispatch) => {
