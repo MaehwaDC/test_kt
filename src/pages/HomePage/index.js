@@ -36,13 +36,6 @@ class HomePage extends PureComponent {
   componentWillUnmount() {
     this.unsubscribe()
   }
-  
-  
-  onUpdateTask = (value, id) => {
-    const { updateTask } = this.props;
-
-    updateTask({ content: value }, id);
-  };
 
   onSubmit = (value, id) => {
     const { history } = this.props;
@@ -51,10 +44,16 @@ class HomePage extends PureComponent {
     history.push('/');
   }
 
-  onEditTask = (id) => {
+  onEditTask = ({ id }) => {
     const { history } = this.props;
 
     history.push(`/edit/${id}`)
+  }
+
+  onCheckTask = (task, checked) => {
+    const { updateTask } = this.props;
+    console.log('checked', checked)
+    updateTask({ ...task, isChecked: checked }, task.id);
   }
 
   renderElement = task => {
@@ -62,9 +61,10 @@ class HomePage extends PureComponent {
     return (
       <Fragment key={task.id}>
         <TaskCard
-          deleteTask={deleteTask}
-          editTask={this.onEditTask}
-          {...task}
+          onDeleteClick={deleteTask}
+          onEditClick={this.onEditTask}
+          onCheckTask={this.onCheckTask}
+          task={task}
         />
       </Fragment>
     );

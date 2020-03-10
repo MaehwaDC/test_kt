@@ -1,31 +1,62 @@
 
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 
 import { DeleteEditButton } from '../../ui-kits/Buttons';
+import { CustomCheckBox } from '../../ui-kits/Inputs/CustomCheckBox';
 
 import './index.scss';
 
 class TaskCard extends PureComponent {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      isChecked: !!props.isChecked,
+    }
+  }
+  
 
   onEditClick = () => {
-    const { editTask, id } = this.props;
+    const { onEditClick, task } = this.props;
     
-    editTask(id);
+    onEditClick(task);
   }
   onDeleteClick = () => {
-    const { deleteTask, id } = this.props
+    const { onDeleteClick, task } = this.props
 
-    deleteTask(id);
+    onDeleteClick(task);
   }
 
+  onCheckTask = () => {
+    const { onCheckTask, task } = this.props;
+    this.toggleCheckTask(() => {
+      const { isChecked } = this.state
+      onCheckTask(task, isChecked)
+    }) 
+  }
+
+  toggleCheckTask = (func) =>  this.setState(prevState => ({ isChecked: !prevState.isChecked }), func)
+
   render() {
-    const { content } = this.props;
+    const { task } = this.props;
+    const { isChecked } = this.state;
 
     return (
       <div className="task-card">
-        <div className="task-card__discription">
-          {content}
+        <div
+          className={classNames(
+            'task-card__discription',
+            { 'task-card__ended': isChecked }
+          )}
+        >
+          <CustomCheckBox
+            checked={isChecked}
+            onChange={this.onCheckTask}
+            className="task-card__checkbox"
+          />
+          {task.content}
         </div>
         <div className="task-card__buttons">
           <DeleteEditButton mode="edit" onClick={this.onEditClick} />
@@ -38,8 +69,9 @@ class TaskCard extends PureComponent {
 
 TaskCard.propTypes = {
   content: PropTypes.string,
-  deleteTask: PropTypes.func.isRequired,
-  editTask: PropTypes.func.isRequired,
+  onDeleteClick: PropTypes.func.isRequired,
+  onEditClick: PropTypes.func.isRequired,
+  onCheckTask: PropTypes.func.isRequired,
 }
 
 TaskCard.defaultProps = {

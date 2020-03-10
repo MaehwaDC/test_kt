@@ -1,0 +1,14 @@
+.custom-check-box {
+
+  display: inline-block;
+
+  border: 1px solid #000;
+  border-radius: 50%;
+  &_checked {
+    background-color: red;
+  }
+
+  input {
+    visibility: hidden;
+  }
+}
