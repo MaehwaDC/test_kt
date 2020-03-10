@@ -1,8 +1,8 @@
-@import "../../styles/variables";
+@import '../../styles/variables';
 
 .content {
   min-height: 800px;
-  
+
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -32,4 +32,3 @@
     padding: 15px 0;
   }
 }
-

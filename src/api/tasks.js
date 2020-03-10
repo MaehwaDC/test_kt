@@ -19,7 +19,11 @@ export class TasksApi extends Entity {
   }
 
   async deleteTask(id) {
-    const res = await this.firebase.firestore().collection("tasks").doc(id).delete();
+    const res = await this.firebase
+      .firestore()
+      .collection('tasks')
+      .doc(id)
+      .delete();
     return res;
   }
 

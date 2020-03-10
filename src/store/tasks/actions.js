@@ -1,12 +1,8 @@
-import {
-  DELETE_TASK,
-  EDIT_TASK,
-  GET_TASKS,
-} from './types';
+import { DELETE_TASK, EDIT_TASK, GET_TASKS } from './types';
 
 import api from '../../api';
 
-export const deleteTask = (taskId) => async (dispatch) => {
+export const deleteTask = taskId => async dispatch => {
   await api.tasks.deleteTask(taskId);
   dispatch({ type: DELETE_TASK, payload: taskId });
 }
@@ -21,9 +17,9 @@ export const onUpdateTasksHandler = (page = 1, limit = 9) => (dispatch) => {
     limit, 
     (data) => updateTasks(data)(dispatch)
   );
-}
+};
 
 export const updateTask = (task, id) => async (dispatch) => {
   dispatch({ type: EDIT_TASK, payload: task });
   await api.tasks.updateTask(task, id);
-}
+};

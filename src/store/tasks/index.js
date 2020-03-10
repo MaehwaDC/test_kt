@@ -1,2 +1,1 @@
-
-export { default } from './reducer.js'
+export { default } from './reducer.js';

@@ -1,5 +1,4 @@
-
-import React, { PureComponent, Fragment } from 'react'
+import React, { PureComponent, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
@@ -41,22 +40,20 @@ class HomePage extends PureComponent {
     const { updateTask } = this.props;
 
     updateTask({ content: value }, id);
-  }
-  
-  renderElement = (task) => {
-    const { 
-      deleteTask,
-    } = this.props;
+  };
+
+  renderElement = task => {
+    const { deleteTask } = this.props;
     return (
       <Fragment key={task.id}>
-        <TaskCard 
+        <TaskCard
           deleteTask={deleteTask}
           editTask={this.onUpdateTask}
           {...task}
         />
       </Fragment>
     );
-  }
+  };
   render() {
     const { 
       taskList,
@@ -73,7 +70,7 @@ class HomePage extends PureComponent {
               <CustomTextForm onSubmit={this.onUpdateTask} />
             </div>
             {taskList.map(this.renderElement)}
-        </div>
+          </div>
         </div>
         <div className="content__item">
           <Paginator current={page} count={tasksCount} />
@@ -102,6 +99,6 @@ const mapDispatchToProps = {
 const enhance = compose(
   connect(mapStateToProps, mapDispatchToProps),
   withRouter,
-)
+);
 
 export default enhance(HomePage);
